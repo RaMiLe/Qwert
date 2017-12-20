@@ -74,8 +74,6 @@ try {
 $name = $_POST['name'];
 $email = $_POST['email'];
 $date = date("Y-m-d");
-$gender = $_POST['gender'];
-$age = $_POST['age'];
 $country = $_POST['country'];
 $birthday = $_POST['birthday'];
 
@@ -83,13 +81,12 @@ if ($name == "" || $email == "") {
 echo "<h3>Не заполнены поля name и email.</h3>";
 }
 else {
-$sql_insert ="INSERT INTO registration_on (name, email, date, gender, age, country, birthday) VALUES (?,?,?,?,?,?,?)";
+$sql_insert ="INSERT INTO registration_on (name, email, date,  country, birthday) VALUES (?,?,?,?,?)";
 $stmt = $conn->prepare($sql_insert);
 $stmt->bindValue(1, $name);
 $stmt->bindValue(2, $email);
 $stmt->bindValue(3, $date);
-$stmt->bindValue(4, $gender);
-$stmt->bindValue(5, $age);
+
 $stmt->bindValue(6, $country);
 $stmt->bindValue(7, $birthday);
 $stmt->execute();
@@ -126,8 +123,7 @@ $sql_select = "SELECT * FROM registration_on";
 $stmt = $conn->query($sql_select);
 $stmt->execute();
 if(isset($_POST['filter'])) {
-$gender = $_POST['gender'];
-$sql_select = "SELECT * FROM registration_on WHERE gender like :gender";
+
 $stmt = $conn->prepare($sql_select);
 $stmt->execute(array(':gender'=>$gender.'%'));
 }
@@ -137,16 +133,12 @@ echo "<h2>Люди, которые зарегистрированы:</h2>";
 echo "<table>";
 echo "<tr><th>Name</th>";
 echo "<th>Email</th>";
-echo "<th>Gender</th>";
-echo "<th>Age</th>";
 echo "<th>Country</th>";
 echo "<th>Birthday</th>";
 echo "<th>Date</th></tr>";
 foreach($registrants as $registrant) {
 echo "<td>".$registrant['name']."</td>";
 echo "<td>".$registrant['email']."</td>";
-echo "<td>".$registrant['gender']."</td>";
-echo "<td>".$registrant['age']."</td>";
 echo "<td>".$registrant['country']."</td>";
 echo "<td>".$registrant['birthday']."</td>";
 echo "<td>".$registrant['date']."</td></tr>";
